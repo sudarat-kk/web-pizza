@@ -121,12 +121,6 @@ $stmt->close();
                                     <h3 class="card-text"> <?php echo $user_row["Role"]; ?></h3>
                                 </div>
                                 <br>
-
-                                <div class="text-border">
-                                    <p>Address</p>
-                                </div>
-                                <br>
-
                             </div>
                         <?php
                         }

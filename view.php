@@ -11,6 +11,59 @@ $sql = "SELECT PizzaID, Name, Description, ImageURL, Price FROM pizza WHERE Pizz
 // ดึงข้อมูลจากฐานข้อมูล
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
+
+// เริ่ม session
+session_start();
+
+// เชื่อมต่อฐานข้อมูล
+include("connect.php");
+
+// เช็คว่ามี session email หรือไม่
+if (!isset($_SESSION["email"])) {
+    echo "<script>alert('กรุณาเข้าสู่ระบบ!');</script>";
+    header("Location: index.php");
+    exit;
+}
+
+// เช็คว่ามี session UserID หรือไม่
+if (!isset($_SESSION['UserID'])) {
+    die("กรุณาเข้าสู่ระบบ!");
+}
+
+$userid = $_SESSION['UserID'];
+
+$stmt = $conn->prepare("SELECT Username,name, Role, url FROM User WHERE UserID = ?");
+$stmt->bind_param("i", $userid);
+
+$stmt->execute();
+
+$result = $stmt->get_result();
+if ($result->num_rows > 0) {
+    $user_row = $result->fetch_assoc();
+} else {
+    die("ไม่พบข้อมูลผู้ใช้!");
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $calculatedPrice = $_POST["calculatedPrice"];
+}
+
+
+$stmt->close();
+
+$cartItemCount = 0;
+
+if (isset($_SESSION['UserID'])) {
+    $userID = $_SESSION['UserID'];
+    $sql = "SELECT COUNT(cartdetailID) AS itemCount FROM cartdetail WHERE UserID = $userID";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_assoc();
+        $cartItemCount = $data['itemCount'];
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,12 +74,15 @@ $row = $result->fetch_assoc();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="view.css">
     <title>View Pizza</title>
+    <style>
+
+    </style>
 </head>
 
 <body>
     <div class="navbar  fixed-top">
         <div id="logo" style="display: flex; align-items: center;">
-            <img src="https://cdn.iconscout.com/icon/free/png-256/free-care-emoji-with-pizza-2419210-2012659.png?f=webp" alt="Logo" width="50">
+            <a href="customerpage.php"><img src="https://cdn.iconscout.com/icon/free/png-256/free-care-emoji-with-pizza-2419210-2012659.png?f=webp" alt="Logo" width="50"></a>
             <h2 style="color: white; margin-left: 10px;">Pizza Makima</h2>
         </div>
 
@@ -36,26 +92,34 @@ $row = $result->fetch_assoc();
                     <div class="col-6">
                         <input type="text" placeholder="ค้นหาพิซซ่า....." class="form-control search-input" name="search" required>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 d-flex justify-content-end">
                         <input type="submit" name="v_search" value="search" class="btn btn-info">
                     </div>
                 </div>
             </form>
         </div>
 
-        <img src="https://cdn-icons-png.flaticon.com/512/219/219969.png" alt="" width="60px" class="rounded-circle">
-
-        <div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 50px;">
-            <h6 style="font-weight: bolder; margin: 0;">คุณ</h6> <!-- เปลี่ยนเป็นชื่อลูกค้าที่เข้าสู่ระบบ -->
-            <h6 style="font-weight: bolder; margin: 0;">สถานะ : ลูกค้า</h6>
-        </div>
-
-        <div class="cart-icon" style="position: relative; margin-right: 50px;">
-            <img src="https://www.freeiconspng.com/thumbs/cart-icon/basket-cart-icon-27.png" alt="" width="50px">
-            <div style="position: absolute; top: -10px; left: 35px; background-color: red; width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold;">
-                0 <!-- ตัวเลขในตะกร้า เผื่อไว้ใช้ใน php -->
+        <?php
+        if ($user_row["Role"] == "Customer") {
+        ?>
+            <img src="<?php echo $user_row["url"]; ?>" alt="Profile Picture" width="60px" style="object-fit: cover;" class="rounded-circle">
+            <div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 50px;">
+                <h6 style="font-weight: bolder; margin: 0;"><?php echo $user_row["name"]; ?></h6>
+                <h6 style="font-weight: bolder; margin: 0;">สถานะ : <?php echo $user_row["Role"]; ?></h6>
             </div>
-        </div>
+        <?php
+        }
+        ?>
+
+        <a href="showcart.php">
+            <div class="cart-icon" style="position: relative; margin-right: 50px;">
+                <img src="https://www.freeiconspng.com/thumbs/cart-icon/basket-cart-icon-27.png" alt="" width="50px">
+                <div style="position: absolute; top: -10px; left: 35px; background-color: red; width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold;">
+                    <?php echo $cartItemCount; ?> <!-- จำนวนรายการในตระกร้า -->
+                </div>
+            </div>
+        </a>
+
 
 
         <div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 50px;">
@@ -71,10 +135,10 @@ $row = $result->fetch_assoc();
         </div>
     </div>
 
-    
-<div class="container mt-5">
+
+    <div class="container mt-5">
         <div class="row justify-content-center">
-        
+
             <div class="col-md-6">
                 <div class="card custom-card">
                     <img src="<?php echo $row["ImageURL"]; ?>" class="card-img-top" alt="Pizza Image">
@@ -82,11 +146,11 @@ $row = $result->fetch_assoc();
                         <h5 class="card-title"><?php echo $row["Name"]; ?></h5>
                         <p class="card-text"><?php echo $row["Description"]; ?></p>
 
-                        <form action="add_to_cart.php" method="post">
+                        <form action="cartdetail.php" method="post">
                             <div class="row">
                                 <div class="col-6 mb-3">
                                     <label for="size" class="form-label mb-1">Size</label>
-                                    <select class="form-select" id="size" name="size" onchange="updatePrice()">
+                                    <select class="form-select" id="size" name="SizeID" onchange="updatePrice()">
                                         <?php
                                         $sizes = $conn->query("SELECT * FROM Size");
                                         while ($size = $sizes->fetch_assoc()) {
@@ -97,14 +161,20 @@ $row = $result->fetch_assoc();
                                 </div>
                                 <div class="col-6 mb-3">
                                     <label for="crust" class="form-label mb-1">Crust</label>
-                                    <select class="form-select" id="crust" name="crust">
-                                        <option value="บางกรอบ">บางกรอบ</option>
-                                        <option value="หนานุ่ม">หนานุ่ม</option>
-                                        <option value="ขอบชีส">ขอบชีส</option>
+                                    <select class="form-select" id="crust" name="CrustID">
+                                        <option value="1">บางกรอบ</option>
+                                        <option value="2">หนานุ่ม</option>
+                                        <option value="3">ขอบชีส</option>
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-6 mb-3">
+                                <label for="quantity" class="form-label mb-1">จำนวน</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" onchange="updatePrice()">
+                            </div>
+
                             <h3 class="card-text mt-2 mb-3 center"><strong>ราคา: </strong><span id="basePrice" data-price="<?php echo $row["Price"]; ?>"><?php echo $row["Price"]; ?></span> บาท</h3>
+                            <input type="hidden" name="calculatedPrice" id="calculatedPrice">
                             <input type="hidden" name="PizzaID" value="<?php echo $row["PizzaID"]; ?>">
                             <button type="submit" class="btn btn-primary mt-2">เพิ่มลงตะกร้า</button>
                             <a href="customerpage.php" class="btn btn-secondary mt-2">กลับไปหน้าลูกค้า</a>
@@ -124,10 +194,15 @@ $row = $result->fetch_assoc();
             const sizeDropdown = document.getElementById('size');
             const multiplier = parseFloat(sizeDropdown.options[sizeDropdown.selectedIndex].getAttribute('data-multiplier'));
 
-            const totalPrice = basePrice * multiplier;
+            const quantityInput = document.getElementById('quantity');
+            const quantity = parseFloat(quantityInput.value);
+
+            const totalPrice = basePrice * multiplier * quantity;
+            document.getElementById('calculatedPrice').value = totalPrice.toFixed(2);
 
             basePriceElement.textContent = totalPrice.toFixed(2);
         }
+
 
         // ให้เรียกฟังก์ชัน updatePrice ทันทีเมื่อหน้าเว็บโหลดเสร็จ
         updatePrice();

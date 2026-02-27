@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 03, 2023 at 08:43 PM
+-- Generation Time: Oct 31, 2023 at 07:57 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -24,37 +24,55 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cart`
---
-
-CREATE TABLE `cart` (
-  `CartID` int(11) NOT NULL,
-  `UserID` int(11) DEFAULT NULL,
-  `CreatedDate` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`CartID`, `UserID`, `CreatedDate`) VALUES
-(1, 8, '2023-09-25 08:32:27'),
-(2, 5, '2023-09-25 08:32:27');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `cartdetail`
 --
 
 CREATE TABLE `cartdetail` (
   `CartDetailID` int(11) NOT NULL,
-  `CartID` int(11) DEFAULT NULL,
   `PizzaID` int(11) DEFAULT NULL,
   `Quantity` int(11) DEFAULT NULL,
   `SizeID` int(11) DEFAULT NULL,
-  `CrustID` int(11) DEFAULT NULL
+  `CrustID` int(11) DEFAULT NULL,
+  `UserID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `combinedorder`
+--
+
+CREATE TABLE `combinedorder` (
+  `OrderID` int(11) NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
+  `OrderDate` date DEFAULT NULL,
+  `Status` enum('ยังไม่จัดส่ง','จัดส่งแล้ว') NOT NULL,
+  `Paystatus` enum('ยังไม่จ่ายเงิน','จ่ายเงินแล้ว') NOT NULL,
+  `Address` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `totalPrice` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `combinedorder`
+--
+
+INSERT INTO `combinedorder` (`OrderID`, `UserID`, `OrderDate`, `Status`, `Paystatus`, `Address`, `phone`, `totalPrice`) VALUES
+(183, 5, '2023-10-31', 'ยังไม่จัดส่ง', 'ยังไม่จ่ายเงิน', '', '', 130),
+(184, 5, '2023-10-31', 'ยังไม่จัดส่ง', 'จ่ายเงินแล้ว', '', '', 130),
+(185, 5, '2023-10-31', 'ยังไม่จัดส่ง', 'ยังไม่จ่ายเงิน', '', '', 150),
+(186, 6, '2023-10-31', 'ยังไม่จัดส่ง', 'ยังไม่จ่ายเงิน', 'มมส', '', 10170),
+(187, 6, '2023-10-31', 'ยังไม่จัดส่ง', 'ยังไม่จ่ายเงิน', 'MSUUUU', '', 900),
+(191, 6, '2023-10-31', 'ยังไม่จัดส่ง', 'ยังไม่จ่ายเงิน', 'yyyyy', '', 570),
+(192, 6, '2023-10-31', 'ยังไม่จัดส่ง', 'ยังไม่จ่ายเงิน', 'iiiii', '', 150),
+(193, 4, '2023-10-31', 'จัดส่งแล้ว', 'จ่ายเงินแล้ว', 'โตเกียวจ้าาไปหาพี่โกโจที่ตัวขาดครึ่ง', '', 765),
+(194, 4, '2023-10-31', 'จัดส่งแล้ว', 'ยังไม่จ่ายเงิน', 'โตเกียว โรงเรีนไสยเวทย์ สั่งซื้อโดย เกะโทสุงุรุ', '0956539327', 10265),
+(195, 4, '2023-10-31', 'ยังไม่จัดส่ง', 'ยังไม่จ่ายเงิน', 'msu', '055555', 145),
+(196, 4, '2023-10-31', 'ยังไม่จัดส่ง', 'ยังไม่จ่ายเงิน', '', '', 165),
+(197, 4, '2023-10-31', 'จัดส่งแล้ว', 'ยังไม่จ่ายเงิน', 'msu', '0956539327', 575),
+(198, 4, '2023-10-31', 'ยังไม่จัดส่ง', 'ยังไม่จ่ายเงิน', 'ที่อยู่: oh no', '0956539327', 165),
+(199, 4, '2023-10-31', 'ยังไม่จัดส่ง', 'ยังไม่จ่ายเงิน', 'ที่อยู่: เนนนนน', 'เบอร์โทร: 055555', 205),
+(200, 4, '2023-10-31', 'ยังไม่จัดส่ง', 'ยังไม่จ่ายเงิน', 'ที่อยู่: la', 'เบอร์โทร: 0956539327', 150015);
 
 -- --------------------------------------------------------
 
@@ -83,27 +101,33 @@ INSERT INTO `crust` (`CrustID`, `CrustType`) VALUES
 --
 
 CREATE TABLE `orderdetail` (
-  `OrderDetailID` int(11) NOT NULL,
-  `OrderID` int(11) DEFAULT NULL,
-  `PizzaID` int(11) DEFAULT NULL,
-  `Quantity` int(11) DEFAULT NULL,
-  `SizeID` int(11) DEFAULT NULL,
-  `CrustID` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `orderpizza`
---
-
-CREATE TABLE `orderpizza` (
+  `DetailID` int(11) NOT NULL,
   `OrderID` int(11) NOT NULL,
-  `UserID` int(11) DEFAULT NULL,
-  `Status` enum('ยังไม่ส่ง','จัดส่งแล้ว') DEFAULT NULL,
-  `TotalPrice` decimal(10,2) DEFAULT NULL,
-  `DeliveryAddress` varchar(255) NOT NULL
+  `PizzaID` int(11) NOT NULL,
+  `Quantity` int(11) NOT NULL,
+  `SizeID` int(11) NOT NULL,
+  `CrustID` int(11) NOT NULL,
+  `UnitPrice` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orderdetail`
+--
+
+INSERT INTO `orderdetail` (`DetailID`, `OrderID`, `PizzaID`, `Quantity`, `SizeID`, `CrustID`, `UnitPrice`) VALUES
+(48, 192, 3, 1, 1, 1, 150.00),
+(49, 193, 2, 2, 1, 1, 300.00),
+(50, 193, 3, 3, 1, 3, 450.00),
+(51, 194, 9, 1, 1, 1, 10000.00),
+(52, 194, 7, 1, 1, 1, 250.00),
+(53, 195, 1, 1, 1, 1, 130.00),
+(54, 196, 2, 1, 1, 1, 150.00),
+(55, 197, 1, 2, 1, 1, 260.00),
+(56, 197, 2, 1, 1, 1, 150.00),
+(57, 197, 4, 1, 1, 1, 150.00),
+(58, 198, 3, 1, 1, 1, 150.00),
+(59, 199, 6, 1, 1, 1, 190.00),
+(60, 200, 9, 6, 4, 3, 150000.00);
 
 -- --------------------------------------------------------
 
@@ -179,8 +203,8 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`UserID`, `url`, `Username`, `PasswordHash`, `Role`, `name`) VALUES
 (1, 'https://media.tenor.com/AXhu_2lIQX4AAAAC/gojo-gojo-satoru.gif', 'satoru@gmail.com', '$2y$10$yJXhhW2Xh0BHOHEQKn5Zf.Ht08AJ2XD20MBstMw0NWAO7kHw9a652', 'ShopOwner', 'Gojo Satoru'),
 (4, 'https://ovicio.com.br/wp-content/uploads/2023/07/20230712-ovicio-jujutsu-kaisen-data-crunchyroll-555x555.jpg', 'suguru@gmail.com', '$2y$10$Fs/7SRol4ZuHBTF9ODWkdermVJFhh.tAu80nwNl6VFShwlHUxu3PC', 'Customer', 'Geto Suguru'),
-(5, '', 'Maki', '123', 'Customer', NULL),
-(6, '', 'Yuta', '123', 'Customer', NULL),
+(5, 'https://i.pinimg.com/1200x/27/e0/0f/27e00fc37aab4b64803ee1201fb9ee85.jpg', 'Maki@gmail.com', '$2y$10$Fs/7SRol4ZuHBTF9ODWkdermVJFhh.tAu80nwNl6VFShwlHUxu3PC', 'Customer', 'Maki'),
+(6, 'https://i.pinimg.com/736x/d3/f1/7c/d3f17c1c02f8ee3ae768e11e25601ea2.jpg', 'Yuta@gmail.com', '$2y$10$yJXhhW2Xh0BHOHEQKn5Zf.Ht08AJ2XD20MBstMw0NWAO7kHw9a652', 'Customer', 'Yuta'),
 (7, '', 'Panda', '123', 'Customer', NULL),
 (8, '', 'Magumi', '123', 'Customer', NULL),
 (9, '', 'Nobata', '123', 'Customer', NULL),
@@ -193,21 +217,21 @@ INSERT INTO `user` (`UserID`, `url`, `Username`, `PasswordHash`, `Role`, `name`)
 --
 
 --
--- Indexes for table `cart`
---
-ALTER TABLE `cart`
-  ADD PRIMARY KEY (`CartID`),
-  ADD KEY `UserID` (`UserID`);
-
---
 -- Indexes for table `cartdetail`
 --
 ALTER TABLE `cartdetail`
   ADD PRIMARY KEY (`CartDetailID`),
-  ADD KEY `CartID` (`CartID`),
   ADD KEY `PizzaID` (`PizzaID`),
   ADD KEY `SizeID` (`SizeID`),
-  ADD KEY `CrustID` (`CrustID`);
+  ADD KEY `CrustID` (`CrustID`),
+  ADD KEY `FK_User_cartdetail` (`UserID`);
+
+--
+-- Indexes for table `combinedorder`
+--
+ALTER TABLE `combinedorder`
+  ADD PRIMARY KEY (`OrderID`),
+  ADD KEY `UserID` (`UserID`);
 
 --
 -- Indexes for table `crust`
@@ -219,18 +243,11 @@ ALTER TABLE `crust`
 -- Indexes for table `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  ADD PRIMARY KEY (`OrderDetailID`),
+  ADD PRIMARY KEY (`DetailID`),
   ADD KEY `OrderID` (`OrderID`),
   ADD KEY `PizzaID` (`PizzaID`),
   ADD KEY `SizeID` (`SizeID`),
   ADD KEY `CrustID` (`CrustID`);
-
---
--- Indexes for table `orderpizza`
---
-ALTER TABLE `orderpizza`
-  ADD PRIMARY KEY (`OrderID`),
-  ADD KEY `UserID` (`UserID`);
 
 --
 -- Indexes for table `pizza`
@@ -248,24 +265,23 @@ ALTER TABLE `size`
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`UserID`),
-  ADD UNIQUE KEY `Username` (`Username`);
+  ADD PRIMARY KEY (`UserID`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `cart`
---
-ALTER TABLE `cart`
-  MODIFY `CartID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
 -- AUTO_INCREMENT for table `cartdetail`
 --
 ALTER TABLE `cartdetail`
-  MODIFY `CartDetailID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `CartDetailID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
+
+--
+-- AUTO_INCREMENT for table `combinedorder`
+--
+ALTER TABLE `combinedorder`
+  MODIFY `OrderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=201;
 
 --
 -- AUTO_INCREMENT for table `crust`
@@ -277,13 +293,7 @@ ALTER TABLE `crust`
 -- AUTO_INCREMENT for table `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  MODIFY `OrderDetailID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `orderpizza`
---
-ALTER TABLE `orderpizza`
-  MODIFY `OrderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `DetailID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `pizza`
@@ -308,16 +318,10 @@ ALTER TABLE `user`
 --
 
 --
--- Constraints for table `cart`
---
-ALTER TABLE `cart`
-  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
-
---
 -- Constraints for table `cartdetail`
 --
 ALTER TABLE `cartdetail`
-  ADD CONSTRAINT `cartdetail_ibfk_1` FOREIGN KEY (`CartID`) REFERENCES `cart` (`CartID`),
+  ADD CONSTRAINT `FK_User_cartdetail` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`),
   ADD CONSTRAINT `cartdetail_ibfk_2` FOREIGN KEY (`PizzaID`) REFERENCES `pizza` (`PizzaID`),
   ADD CONSTRAINT `cartdetail_ibfk_3` FOREIGN KEY (`SizeID`) REFERENCES `size` (`SizeID`),
   ADD CONSTRAINT `cartdetail_ibfk_4` FOREIGN KEY (`CrustID`) REFERENCES `crust` (`CrustID`);
@@ -326,16 +330,10 @@ ALTER TABLE `cartdetail`
 -- Constraints for table `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  ADD CONSTRAINT `orderdetail_ibfk_1` FOREIGN KEY (`OrderID`) REFERENCES `orderpizza` (`OrderID`),
+  ADD CONSTRAINT `orderdetail_ibfk_1` FOREIGN KEY (`OrderID`) REFERENCES `combinedorder` (`OrderID`),
   ADD CONSTRAINT `orderdetail_ibfk_2` FOREIGN KEY (`PizzaID`) REFERENCES `pizza` (`PizzaID`),
   ADD CONSTRAINT `orderdetail_ibfk_3` FOREIGN KEY (`SizeID`) REFERENCES `size` (`SizeID`),
   ADD CONSTRAINT `orderdetail_ibfk_4` FOREIGN KEY (`CrustID`) REFERENCES `crust` (`CrustID`);
-
---
--- Constraints for table `orderpizza`
---
-ALTER TABLE `orderpizza`
-  ADD CONSTRAINT `orderpizza_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

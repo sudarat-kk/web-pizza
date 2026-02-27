@@ -34,6 +34,20 @@ if ($result->num_rows > 0) {
 
 $stmt->close();
 
+$cartItemCount = 0;
+
+if (isset($_SESSION['UserID'])) {
+    $userID = $_SESSION['UserID'];
+    $sql = "SELECT COUNT(cartdetailID) AS itemCount FROM cartdetail WHERE UserID = $userID";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_assoc();
+        $cartItemCount = $data['itemCount'];
+    }
+}
+
+
 ?>
 
 
@@ -86,7 +100,7 @@ $stmt->close();
 <body>
     <div class="navbar fixed-top">
         <div id="logo" style="display: flex; align-items: center;">
-            <img src="https://cdn.iconscout.com/icon/free/png-256/free-care-emoji-with-pizza-2419210-2012659.png?f=webp" alt="Logo" width="50">
+        <a href="customerpage.php"><img src="https://cdn.iconscout.com/icon/free/png-256/free-care-emoji-with-pizza-2419210-2012659.png?f=webp" alt="Logo" width="50"></a>
             <h2 style="color: white; margin-left: 10px;">Pizza Makima</h2>
         </div>
 
@@ -109,20 +123,24 @@ $stmt->close();
         ?>
             <img src="<?php echo $user_row["url"]; ?>" alt="Profile Picture" width="60px" style="object-fit: cover;" class="rounded-circle">
             <div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 50px;">
+            <h6 style="font-weight: bolder; margin: 0;">สถานะ : <?php echo $user_row["Role"]; ?></h6>
                 <h6 style="font-weight: bolder; margin: 0;"><?php echo $user_row["name"]; ?></h6>
-                <h6 style="font-weight: bolder; margin: 0;">สถานะ : <?php echo $user_row["Role"]; ?></h6>
+                <h6 style="font-weight: bolder; margin: 0;"> <?php echo $user_row["Username"]; ?></h6>
             </div>
         <?php
         }
         ?>
 
 
-        <div class="cart-icon" style="position: relative; margin-right: 50px;">
-            <img src="https://www.freeiconspng.com/thumbs/cart-icon/basket-cart-icon-27.png" alt="" width="50px">
-            <div style="position: absolute; top: -10px; left: 35px; background-color: red; width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold;">
-                0 <!-- ตัวเลขในตะกร้า เผื่อไว้ใช้ใน php -->
-            </div>
+<a href="showcart.php">
+    <div class="cart-icon" style="position: relative; margin-right: 50px;">
+        <img src="https://www.freeiconspng.com/thumbs/cart-icon/basket-cart-icon-27.png" alt="" width="50px">
+        <div style="position: absolute; top: -10px; left: 35px; background-color: red; width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold;">
+            <?php echo $cartItemCount; ?> <!-- จำนวนรายการในตระกร้า -->
         </div>
+    </div>
+</a>
+
 
 
         <div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 50px;">
@@ -132,7 +150,7 @@ $stmt->close();
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="customerpage.php">หน้าหลัก</a></li>
                 <li><a class="dropdown-item" href="infocustomer.php">ข้อมูลส่วนตัว</a></li>
-                <li><a class="dropdown-item" href="#">รายการสั่งซื้อ</a></li>
+                <li><a class="dropdown-item" href="Order.php?UserID=<?php echo $userID; ?>">ออร์เดอร์ของคุณ</a></li>
                 <li><a class="dropdown-item" href="index.php">ออกจากระบบ</a></li>
             </ul>
         </div>
@@ -173,7 +191,7 @@ $stmt->close();
             </button>
         </div>
     </div>
-    ิ<br>
+    <br>
     <div class="container-fluid">
         <?php
         include("connect.php");

@@ -114,16 +114,11 @@ $stmt->close();
                             <img src="<?php echo $user_row["url"] ?>" class="card-img profile-image" alt="...">
                             <div class="card-body">
                                 <div class="text-border">
-                                    <h2 class="card-title">Name: <?php echo $user_row["name"]; ?></h2>
+                                    <h2 class="card-title">Name : <?php echo $user_row["name"]; ?></h2>
                                 </div>
                                 <br>
                                 <div class="text-border" style="color: white; font-weight: bold;">
-                                    <h3 class="card-text"> <?php echo $user_row["Role"]; ?></h3>
-                                </div>
-                                <br>
-
-                                <div class="text-border">
-                                    <p>Address</p>
+                                    <h3 class="card-text">User Status : <?php echo $user_row["Role"]; ?></h3>
                                 </div>
                                 <br>
 
