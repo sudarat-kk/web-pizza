@@ -1,0 +1,83 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+#logo {
+    margin-left: 20px;
+    /* margin-top: 18px; */
+}
+
+.white-box_section {
+    background-color: rgb(191, 185, 230);
+     padding: 20px;
+    margin: 20px; 
+    /* border: 1px solid #ccc; */
+    height: 300px;   
+}
+
+.white-box {
+    background-color: rgb(236, 36, 36);
+    /* padding: 20px; */
+    margin: 5px; 
+    /* border: 1px solid #ccc; */
+    width: 370px;
+    margin-left: 60px;
+    height: 200px;
+    border-radius: 30px;
+}
+
+/* #picture_section {
+    position: absolute;
+    top: ;
+    
+} */
+
+.row {
+    display: flex; /* ใช้ flex layout ในการจัดการกับแถว */
+    justify-content: center; /* จัดวางข้อมูลในแถวให้อยู่ตรงกลาง */
+    flex-wrap: wrap; /* อนุญาตให้ข้อมูลที่เกินขอบแถววางลงมาเป็นแถวถัดไป */
+}
+
+.card {
+    flex-basis: calc(25% - 20px); /* ปรับให้การ์ดมีความกว้าง 20% ของขนาดหน้าต่าง และหักขอบออก 20px */
+    box-sizing: border-box;
+    margin: 10px;
+    border: 1px solid #d0d0f4; /* เพิ่มเส้นขอบเพื่อให้เห็นการ์ดชัดเจนขึ้น */
+    overflow: hidden; /* ควบคุมเนื้อหาภายในการ์ดให้ไม่ล้นออกมาจากการ์ด */
+}
+
+.card img {
+    max-width: 100%;
+    display: block; /* ปรับให้ภาพแสดงผลในแบบ block */
+    margin: 0 auto; /* จัดให้ภาพอยู่ตรงกลางของการ์ด */
+    height: 250px; /* กำหนดความสูงของภาพเป็น 150px */
+    object-fit: cover; /* จัดการภาพให้พอดีกับพื้นที่ที่กำหนดโดยครอบคลุมพื้นที่ทั้งหมด */
+}
+
+.search-input {
+    width: 600px;  /* เปลี่ยนค่าตามที่คุณต้องการ */
+}
+
+.container{
+    max-width: 800px;
+    margin: 0 auto;
+} 
+
+.carousel-item img {
+    height: 400px;  /* คุณสามารถปรับค่านี้ตามที่ต้องการ */
+    object-fit: cover;
+    border-radius: 30px;
+}
+
+/* <style>
+body {
+    background-color: #bd3030;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to top, #7b27b7 10%, rgb(242, 153, 181) 90%) no-repeat
+}
+</style> */

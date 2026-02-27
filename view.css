@@ -1,0 +1,38 @@
+body {
+    padding-top: 80px;  /* ความสูงของ navbar + สัก 20px เพื่อการเว้นวรรค */
+    background-image: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e364b032-d313-49f5-a183-997e745d829f/dedlkp0-f870cf6b-1b89-4aa4-ba23-4696b7ebe006.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2UzNjRiMDMyLWQzMTMtNDlmNS1hMTgzLTk5N2U3NDVkODI5ZlwvZGVkbGtwMC1mODcwY2Y2Yi0xYjg5LTRhYTQtYmEyMy00Njk2YjdlYmUwMDYuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.s-hxHZ3Nx4RAv8xOxVIBStOaapu5k4aVd84E81IPULs");
+    font-family: 'Poppins', sans-serif;
+    background-size: cover;
+    /* ให้ภาพเต็มเฟรม */
+    background-position: center;
+    /* ให้ภาพอยู่กึ่งกลาง */
+    background-attachment: fixed;
+    /* ภาพพื้นหลังคงที่ */
+}
+
+.navbar {
+    display: flex;
+    /* justify-content: center; */
+    background-color: rgb(183, 96, 215);
+}
+
+.card {
+    background-image: url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg?cs=srgb&dl=pexels-veeterzy-114979.jpg&fm=jpg");
+    background-size: cover;
+    /* แสดงภาพพื้นหลังให้เต็มการ์ด */
+    background-position: center;
+    /* ตั้งค่าตำแหน่งของภาพพื้นหลังให้อยู่ตรงกลางการ์ด */
+}
+
+.custom-card {
+    padding: 40px 35px;
+}
+#size {
+font-size: 14px;
+padding: 10px;
+width: 100%;
+height: 40px;
+border: 2px solid #ddd;
+border-radius: 5px;
+margin-bottom: 15px;
+}

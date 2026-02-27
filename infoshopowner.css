@@ -1,0 +1,79 @@
+.search-input {
+    width: 600px;
+    /* เปลี่ยนค่าตามที่คุณต้องการ */
+}
+
+body {
+    padding-top: 80px;  /* ความสูงของ navbar + สัก 20px เพื่อการเว้นวรรค */
+    background-image: url("https://i.pinimg.com/originals/85/5c/29/855c29075dde87ed2adbd2ab840375f7.jpg");
+    font-family: 'Poppins', sans-serif;
+    background-size: cover;
+    /* ให้ภาพเต็มเฟรม */
+    background-position: center;
+    /* ให้ภาพอยู่กึ่งกลาง */
+    background-attachment: fixed;
+    /* ภาพพื้นหลังคงที่ */
+}
+
+.navbar {
+    display: flex;
+    /* justify-content: center; */
+    background-color: rgb(237, 183, 237);
+    ;
+}
+
+.card {
+    background-image: url("https://upload-os-bbs.hoyolab.com/upload/2022/04/24/77552021/f0bb032930792261623f41dfa22c2489_8636258703799466104.png");
+    /* แสดงภาพพื้นหลังให้เต็มการ์ด */
+    background-size: cover;
+    background-position: center;
+    /* ตั้งค่าตำแหน่งของภาพพื้นหลังให้อยู่ตรงกลางการ์ด */
+    transition: transform 0.3s;
+}
+
+.mb-3 input {
+    border-radius: 15px;
+    box-shadow: 0px 4px 6px rgba(128, 128, 128, 0.5);
+    width: 85%;
+    margin: 0 auto;
+    height: 50px;
+}
+
+.mb-3 label {
+    margin-right: 430px;
+    font-weight: bolder;
+}
+
+#setButton {
+    background-color: #311952;
+    color: rgb(255, 255, 255);
+    font-weight: bolder;
+    font-size: 18px;
+    border-radius: 50px;
+    width: 150px;
+    height: 50px;
+}
+
+.modal-dialog {
+    max-width: 800px;
+}
+
+.modal-content {
+    height: 400px;
+}
+
+.profile-image {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 60%; /* เพิ่มบรรทัดนี้เพื่อทำให้รูปภาพเป็นวงกลม */
+}
+
+.text-border {
+    border: 2px solid black;  /* กำหนดขอบสี่เหลี่ยมเป็นสีดำกว้าง 2 พิกเซล */
+    padding: 10px;            /* กำหนดระยะห่างภายในกรอบ */
+    margin-bottom: 10px;     /* กำหนดระยะห่างระหว่างกรอบ */
+    background-color: rgb(185, 200, 244); /* สีดำทึบ 50% */
+    display: inline-block;
+    border-radius: 30px; /* ทำให้ขอบมน */
+}
